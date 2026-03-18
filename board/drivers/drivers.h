@@ -5,8 +5,6 @@
 #include "board/crc.h"
 #ifdef STM32H7
 #include "board/stm32h7/lladc_declarations.h"
-#else
-#include "board/stm32f4/lladc_declarations.h"
 #endif
 
 // ******************** bootkick ********************
@@ -127,6 +125,7 @@ bool can_init(uint8_t can_number);
 
 #endif // STM32H7
 
+#ifdef STM32H7
 // ******************** harness ********************
 
 #define HARNESS_STATUS_NC 0U
@@ -193,6 +192,8 @@ void handle_interrupt(IRQn_Type irq_type);
 void interrupt_timer_handler(void);
 void init_interrupts(bool check_rate_limit);
 
+#endif // STM32H7
+
 // ******************** registers ********************
 
 // 10 bit hash with 23 as a prime
@@ -240,6 +241,7 @@ void spi_rx_done(void);
 void spi_tx_done(bool reset);
 
 // ******************** uart ********************
+#ifdef STM32H7
 
 // ***************************** Definitions *****************************
 #define FIFO_SIZE_INT 0x400U
@@ -278,6 +280,8 @@ static void puth4(unsigned int i);
 #if defined(DEBUG_SPI) || defined(DEBUG_USB) || defined(DEBUG_COMMS)
 static void hexdump(const void *a, int l);
 #endif
+
+#endif // STM32H7
 
 // ******************** usb ********************
 

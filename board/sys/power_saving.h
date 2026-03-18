@@ -69,6 +69,7 @@ static void enter_stop_mode(void) {
     current_board->enable_can_transceiver(i, false);
   }
 
+#ifdef STM32H7
   // disable ADCs
   ADC1->CR &= ~(ADC_CR_ADEN);
   ADC1->CR |= ADC_CR_DEEPPWD;
@@ -81,6 +82,7 @@ static void enter_stop_mode(void) {
   register_clear_bits(&(RCC->AHB2LPENR), RCC_AHB2LPENR_SRAM1LPEN | RCC_AHB2LPENR_SRAM2LPEN);
   register_clear_bits(&(RCC->AHB4LPENR), RCC_AHB4LPENR_SRAM4LPEN);
   register_clear_bits(&(RCC->AHB3LPENR), RCC_AHB3LPENR_AXISRAMLPEN);
+#endif
 
   // SBU pins to input for EXTI wakeup
   set_gpio_mode(current_board->harness_config->GPIO_SBU1,
