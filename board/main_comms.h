@@ -44,7 +44,9 @@ static int get_health_pkt(void *dat) {
 
   health->som_reset_triggered = bootkick_reset_triggered;
 
+#ifdef STM32H7
   health->sound_output_level_pkt = sound_output_level;
+#endif
 
   return sizeof(*health);
 }
