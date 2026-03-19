@@ -431,8 +431,9 @@ class Panda:
       logger.info("flash: already up to date")
       return
 
+    mcu = McuType.F4 if self.get_type() in Panda.F4_DEVICES else McuType.H7
     if not fn:
-      fn = os.path.join(FW_PATH, McuType.H7.config.app_fn)
+      fn = os.path.join(FW_PATH, mcu.config.app_fn)
     assert os.path.isfile(fn)
     logger.debug("flash: main version is %s", self.get_version())
     if not self.bootstub:
@@ -447,7 +448,7 @@ class Panda:
     logger.debug("flash: bootstub version is %s", self.get_version())
 
     # do flash
-    Panda.flash_static(self._handle, code, mcu_type=McuType.H7)
+    Panda.flash_static(self._handle, code, mcu_type=mcu)
 
     # reconnect
     if reconnect:
@@ -498,7 +499,8 @@ class Panda:
   def up_to_date(self, fn=None) -> bool:
     current = self.get_signature()
     if fn is None:
-      fn = os.path.join(FW_PATH, McuType.H7.config.app_fn)
+      mcu = McuType.F4 if self.get_type() in Panda.F4_DEVICES else McuType.H7
+      fn = os.path.join(FW_PATH, mcu.config.app_fn)
     expected = Panda.get_signature_from_firmware(fn)
     return (current == expected)
 
@@ -631,7 +633,8 @@ class Panda:
     return self._serial
 
   def get_dfu_serial(self):
-    return PandaDFU.st_serial_to_dfu_serial(self._serial, McuType.H7)
+    mcu = McuType.F4 if self.get_type() in Panda.F4_DEVICES else McuType.H7
+    return PandaDFU.st_serial_to_dfu_serial(self._serial, mcu)
 
   def get_uid(self):
     """
